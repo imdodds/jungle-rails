@@ -20,6 +20,11 @@ Rails.application.routes.draw do
 
   resources :about, only: [:index]
 
+  # These route will be for signup. The first renders a form in the browser, the second will recievethe form and create a user in our database using the data given to the user
+  get '/signup' => 'users#new'
+  post '/users' => 'users#create'
+  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
