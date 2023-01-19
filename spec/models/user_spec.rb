@@ -90,4 +90,55 @@ RSpec.describe User, type: :model do
       expect(@user).to_not be_valid
     end
   end
+
+  describe '.authenticate_with_credentials' do
+
+    it "should return a user given succesful authentication" do
+      @user = User.new(
+        name: 'Ian',
+        email: 'ian@test.com',
+        password: 'test123',
+        password_confirmation: 'test123'
+      )
+      @user.save
+      @user = User.authenticate_with_credentials('ian@test.com', 'test123')
+      expect(@user).to_not be(nil)
+    end
+
+    it "should not return a user given incorrect password" do
+      @user = User.new(
+        name: 'Ian',
+        email: 'ian@test.com',
+        password: 'test123',
+        password_confirmation: 'test123'
+      )
+      @user.save
+      @user = User.authenticate_with_credentials('ian@test.com', 'test456')
+      expect(@user).to be(nil)
+    end
+
+    it "should return a user given succesful authentication despite extra whitespace" do
+      @user = User.new(
+        name: 'Ian',
+        email: 'ian@test.com',
+        password: 'test123',
+        password_confirmation: 'test123'
+      )
+      @user.save
+      @user = User.authenticate_with_credentials(' ian@test.com ', 'test123')
+      expect(@user).to_not be(nil)
+    end
+
+    it "should return a user given succesful authentication despite wrong case" do
+      @user = User.new(
+        name: 'Ian',
+        email: 'ian@test.com',
+        password: 'test123',
+        password_confirmation: 'test123'
+      )
+      @user.save
+      @user = User.authenticate_with_credentials('IAN@TEST.com', 'test123')
+      expect(@user).to_not be(nil)
+    end
+  end
 end
